@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1081005855815",
+    "project_id": "oays-flutter",
+    "storage_bucket": "oays-flutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1081005855815:android:debda6f5017611a4d28d62",
+        "android_client_info": {
+          "package_name": "com.example.oays"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1081005855815-k3dj48armge5hud9rphq35f27e2gee7b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3QrHyKP80wnCO9-KzMm3lKgTE6eWytvI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1081005855815-k3dj48armge5hud9rphq35f27e2gee7b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
