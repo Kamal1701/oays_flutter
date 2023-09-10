@@ -20,6 +20,7 @@ class _OAYSMerchantSignUpScreenState extends State<OAYSMerchantSignUpScreen> {
   final _locationTextController = TextEditingController();
   final _shopNameTextController = TextEditingController();
   final _shopStreetTextController = TextEditingController();
+  final _shopCityTextController = TextEditingController();
   final _shopStateTextController = TextEditingController();
   final _shopPincodeTextController = TextEditingController();
 
@@ -80,6 +81,11 @@ class _OAYSMerchantSignUpScreenState extends State<OAYSMerchantSignUpScreen> {
                     obscureText: true),
                 addVerticalSpace(15),
                 OAYSCustomTextField(
+                    controller: _locationTextController,
+                    hintText: "location",
+                    obscureText: false),
+                addVerticalSpace(15),
+                OAYSCustomTextField(
                     controller: _shopNameTextController,
                     hintText: "shop name",
                     obscureText: false),
@@ -90,7 +96,7 @@ class _OAYSMerchantSignUpScreenState extends State<OAYSMerchantSignUpScreen> {
                     obscureText: false),
                 addVerticalSpace(15),
                 OAYSCustomTextField(
-                    controller: _locationTextController,
+                    controller: _shopCityTextController,
                     hintText: "city name",
                     obscureText: false),
                 addVerticalSpace(15),
@@ -105,7 +111,8 @@ class _OAYSMerchantSignUpScreenState extends State<OAYSMerchantSignUpScreen> {
                     obscureText: false),
                 addVerticalSpace(30),
                 OAYSCustomElevatedButtons(
-                    buttonText: "Sign Up", onTap: merchantSignUp)
+                    buttonText: "Sign Up", onTap: merchantSignUp),
+                addVerticalSpace(50),
               ],
             ),
           ),

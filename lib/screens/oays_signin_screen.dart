@@ -5,6 +5,8 @@ import 'package:oays/screens/oays_forgot_password_screen.dart';
 import 'package:oays/screens/oays_home_screen.dart';
 import 'package:oays/screens/oays_merchant_signup_screen.dart';
 import 'package:oays/screens/oays_signup_screen.dart';
+import 'package:oays/services/auth_services.dart';
+import 'package:oays/services/database_services.dart';
 import 'package:oays/utils/helpers/color_utils.dart';
 import 'package:oays/utils/helpers/helper_widgets.dart';
 
@@ -19,15 +21,34 @@ class OAYSSignInScreen extends StatefulWidget {
 class _OAYSSignInScreenState extends State<OAYSSignInScreen> {
   final _emailTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
+  Future<dynamic>? getStatus;
 
-  void userSignIn() {
+  Future userSignIn() async {
     print("user clicked signup button");
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => OAYSHomeScreen(),
-      ),
-    );
+    if (_emailTextController.text.isNotEmpty &&
+        _passwordTextController.text.isNotEmpty) {
+      final message = await AuthServices().oAYSLoginService(
+        emailId: _emailTextController.text,
+        password: _passwordTextController.text,
+      );
+      if (message.toString().contains('Success')) {
+        final getCustomerStatus = await DatabaseService().getCustomer();
+        return getCustomerStatus;
+      }
+      if (!message.toString().contains('Success') && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message.toString()),
+          ),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter your login credential..'),
+        ),
+      );
+    }
   }
 
   void _onButtonPressed() {
@@ -98,7 +119,17 @@ class _OAYSSignInScreenState extends State<OAYSSignInScreen> {
                 addVerticalSpace(20),
                 OAYSCustomElevatedButtons(
                   buttonText: "Sign In",
-                  onTap: userSignIn,
+                  onTap: () async {
+                    getStatus = userSignIn();
+                    // if (getStatus.toString().contains('Success')) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => OAYSHomeScreen(),
+                      ),
+                    );
+                    // }
+                  },
                 ),
                 addVerticalSpace(20),
                 signUpOption(),
