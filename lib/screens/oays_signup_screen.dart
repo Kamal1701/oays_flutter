@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:oays/components/oays_sigin_buttons.dart';
 import 'package:oays/components/oays_textfields.dart';
 import 'package:oays/models/customer_registration.dart';
 import 'package:oays/screens/oays_signin_screen.dart';
 import 'package:oays/services/auth_services.dart';
 import 'package:oays/services/database_services.dart';
+import 'package:oays/utils/helpers/color_constant.dart';
 import 'package:oays/utils/helpers/color_utils.dart';
 import 'package:oays/utils/helpers/helper_widgets.dart';
 
@@ -51,19 +53,33 @@ class _OAYSCustomerSignUpScreenState extends State<OAYSCustomerSignUpScreen> {
       }
 
       if (!message.contains('Success') && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(message),
-          ),
+        Get.snackbar(
+          "Info",
+          message.toString(),
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: boxFillColor,
+          colorText: Colors.black,
         );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text(message),
+        //   ),
+        // );
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please fill all the details"),
-          // shape: RoundedRectangleBorder(borderRadiusBorderRadius.circular(8.0),),
-        ),
+      Get.snackbar(
+        "Info",
+        "Please fill the details",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: boxFillColor,
+        colorText: Colors.black,
       );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(
+      //     content: Text("Please fill all the details"),
+      //     // shape: RoundedRectangleBorder(borderRadiusBorderRadius.circular(8.0),),
+      //   ),
+      // );
       // print(jsonEncode(custReg).toString());
     }
   }
@@ -129,12 +145,15 @@ class _OAYSCustomerSignUpScreenState extends State<OAYSCustomerSignUpScreen> {
                   onTap: () async {
                     status = userSignUp();
                     if (status.toString().contains('Success')) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const OAYSSignInScreen(),
-                        ),
+                      Get.to(
+                        () => const OAYSSignInScreen(),
                       );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => const OAYSSignInScreen(),
+                      //   ),
+                      // );
                     }
                   },
                 ),
