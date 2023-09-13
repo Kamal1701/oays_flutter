@@ -22,18 +22,28 @@ class OAYSSignInController extends GetxController {
   }
 
   Future<void> login() async {
-    String? error = await controller.oAYSCustomerLoginService(
-      emailId: emailAddress.text.trim(),
-      password: password.text.trim(),
-    );
-    if (error != null) {
+    if (isEmailAddressEmpty.value || isPasswordEmpty.value) {
       Get.snackbar(
         "Info",
-        error.toString(),
+        'Please enter your credential details.',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: boxFillColor,
         colorText: Colors.black,
       );
+    } else {
+      String? error = await controller.oAYSCustomerLoginService(
+        emailId: emailAddress.text.trim(),
+        password: password.text.trim(),
+      );
+      if (error != null) {
+        Get.snackbar(
+          "Info",
+          error.toString(),
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: boxFillColor,
+          colorText: Colors.black,
+        );
+      }
     }
   }
 }

@@ -4,11 +4,8 @@ import 'package:oays/components/oays_sigin_buttons.dart';
 import 'package:oays/components/oays_textfields.dart';
 import 'package:oays/controllers/oays_signin_screen_controller.dart';
 import 'package:oays/screens/oays_forgot_password_screen.dart';
-import 'package:oays/screens/oays_home_screen.dart';
 import 'package:oays/screens/oays_merchant_signup_screen.dart';
 import 'package:oays/screens/oays_signup_screen.dart';
-import 'package:oays/services/auth_services.dart';
-import 'package:oays/services/database_services.dart';
 import 'package:oays/utils/helpers/color_constant.dart';
 import 'package:oays/utils/helpers/color_utils.dart';
 import 'package:oays/utils/helpers/helper_widgets.dart';
@@ -23,35 +20,22 @@ class OAYSSignInScreen extends StatefulWidget {
 // ignore: camel_case_types
 class _OAYSSignInScreenState extends State<OAYSSignInScreen> {
   final controller = Get.put(OAYSSignInController());
-  // final _emailTextController = TextEditingController();
-  // final _passwordTextController = TextEditingController();
   Future<dynamic>? getStatus;
 
   Future userSignIn() async {
-    print("user clicked signup button");
-    // if (_emailTextController.text.isNotEmpty &&
-    //     _passwordTextController.text.isNotEmpty) {
-    //   final message = await AuthServices().oAYSLoginService(
-    //     emailId: _emailTextController.text,
-    //     password: _passwordTextController.text,
+    controller.isEmailEmptyValidation(controller.emailAddress.text);
+    controller.isPasswordEmptyValidation(controller.password.text);
+    // if (controller.isEmailAddressEmpty.value ||
+    //     controller.isPasswordEmpty.value) {
+    //   return Get.snackbar(
+    //     "Info",
+    //     'Please enter your credential',
+    //     snackPosition: SnackPosition.BOTTOM,
+    //     backgroundColor: boxFillColor,
+    //     colorText: Colors.black,
     //   );
-    //   if (message.toString().contains('Success')) {
-    //     final getCustomerStatus = await DatabaseService().getCustomer();
-    //     return getCustomerStatus;
-    //   }
-    //   if (!message.toString().contains('Success') && mounted) {
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //       SnackBar(
-    //         content: Text(message.toString()),
-    //       ),
-    //     );
-    //   }
     // } else {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(
-    //       content: Text('Please enter your login credential..'),
-    //     ),
-    //   );
+    controller.login();
     // }
   }
 
@@ -124,70 +108,7 @@ class _OAYSSignInScreenState extends State<OAYSSignInScreen> {
                 OAYSCustomElevatedButtons(
                   buttonText: "Sign In",
                   onTap: () async {
-                    // getStatus = userSignIn();
-                    // if (getStatus.toString().contains('Success')) {
-                    // if (_emailTextController.text.isNotEmpty &&
-                    //     _passwordTextController.text.isNotEmpty) {
-                    //   final message = await AuthServices().oAYSLoginService(
-                    //     emailId: _emailTextController.text,
-                    //     password: _passwordTextController.text,
-                    //   );
-                    //   if (message.toString().contains('Success')) {
-                    //     Get.to(() => const OAYSHomeScreen());
-                    //     // Navigator.push(
-                    //     //   context,
-                    //     //   MaterialPageRoute(
-                    //     //     builder: (context) => OAYSHomeScreen(),
-                    //     //   ),
-                    //     // );
-                    //   }
-                    //   Get.snackbar(
-                    //     "Info",
-                    //     message.toString(),
-                    //     snackPosition: SnackPosition.BOTTOM,
-                    //     backgroundColor: boxFillColor,
-                    //     colorText: Colors.black,
-                    //   );
-
-                    //   // if (!message.toString().contains('Success') && mounted) {
-                    //   //   ScaffoldMessenger.of(context).showSnackBar(
-                    //   //     SnackBar(
-                    //   //       content: Text(message.toString()),
-                    //   //     ),
-                    //   //   );
-                    //   // }
-                    // } else {
-                    //   Get.snackbar(
-                    //     'Info',
-                    //     'Please enter your login credential..',
-                    //     snackPosition: SnackPosition.BOTTOM,
-                    //     backgroundColor: boxFillColor,
-                    //     colorText: Colors.black,
-                    //   );
-                    //   // ScaffoldMessenger.of(context).showSnackBar(
-                    //   //   const SnackBar(
-                    //   //     content: Text('Please enter your login credential..'),
-                    //   //   ),
-                    //   // );
-                    // }
-
-                    // }
-                    controller
-                        .isEmailEmptyValidation(controller.emailAddress.text);
-                    controller
-                        .isPasswordEmptyValidation(controller.password.text);
-                    if (controller.isEmailAddressEmpty.value ||
-                        controller.isPasswordEmpty.value) {
-                      return Get.snackbar(
-                        "Info",
-                        'Please enter your credential',
-                        snackPosition: SnackPosition.BOTTOM,
-                        backgroundColor: boxFillColor,
-                        colorText: Colors.black,
-                      );
-                    } else {
-                      controller.login();
-                    }
+                    userSignIn();
                   },
                 ),
                 addVerticalSpace(20),

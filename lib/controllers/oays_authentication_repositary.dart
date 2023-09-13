@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:oays/screens/oays_home_screen.dart';
+import 'package:oays/utils/helpers/color_constant.dart';
 
 class OAYSAuthenticationServices extends GetxController {
   static OAYSAuthenticationServices get instance => Get.find();
@@ -30,18 +33,38 @@ class OAYSAuthenticationServices extends GetxController {
     required String password,
   }) async {
     try {
-      await _auth.signInWithEmailAndPassword(
-          email: emailId, password: password);
-      return 'Success';
+      await _auth
+          .signInWithEmailAndPassword(email: emailId, password: password)
+          .then(
+            (value) => Get.offAll(
+              const OAYSHomeScreen(),
+            ),
+          );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
+        // Get.snackbar("Info", 'No user found for that email. Please sign up',
+        //     snackPosition: SnackPosition.BOTTOM,
+        //     colorText: Colors.black,
+        //     backgroundColor: boxFillColor);
         return 'No user found for that email. Please sign up';
       } else if (e.code == 'wrong-password') {
+        // Get.snackbar("Info", 'Invalid password',
+        //     snackPosition: SnackPosition.BOTTOM,
+        //     colorText: Colors.black,
+        //     backgroundColor: boxFillColor);
         return 'Invalid password';
       } else {
-        return e.message;
+        // Get.snackbar("Info", e.message.toString(),
+        //     snackPosition: SnackPosition.BOTTOM,
+        //     colorText: Colors.black,
+        //     backgroundColor: boxFillColor);
+        return e.message.toString();
       }
     } catch (e) {
+      // Get.snackbar("Info", e.toString(),
+      //     snackPosition: SnackPosition.BOTTOM,
+      //     colorText: Colors.black,
+      //     backgroundColor: boxFillColor);
       return e.toString();
     }
   }
