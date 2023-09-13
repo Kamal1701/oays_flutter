@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oays/controllers/oays_authentication_repositary.dart';
 import 'package:oays/models/customer_registration.dart';
+import 'package:oays/screens/oays_signin_screen.dart';
 import 'package:oays/utils/helpers/color_constant.dart';
 
 class OAYSSignUpController extends GetxController {
   static OAYSSignUpController get instance => Get.find();
-  final controller = Get.put(OAYSAuthenticationServices());
+  // final controller = Get.put(OAYSAuthenticationServices());
 
   final userName = TextEditingController();
   final emailAddress = TextEditingController();
@@ -35,10 +36,6 @@ class OAYSSignUpController extends GetxController {
   }
 
   Future<void> createUser() async {
-    // if (isUserNameEmpty.value ||
-    //     isEmailAddressEmpty.value ||
-    //     isPasswordEmpty.value ||
-    //     isLocation.value) {
     if (userName.text.isEmpty &&
         emailAddress.text.isEmpty &&
         password.text.isEmpty &&
@@ -92,17 +89,30 @@ class OAYSSignUpController extends GetxController {
           '',
           '',
           '');
-      String? error = await controller.oAYSCustomerRegistrationService(
-          emailAddress.text.trim(), password.text.trim(), custReg);
-      if (error != null) {
+      String? error = await OAYSAuthenticationServices.instance
+          .oAYSCustomerRegistrationService(
+              emailAddress.text.trim(), password.text.trim(), custReg);
+      // print('create user:');
+      // print(error);
+      if (error != 'Success') {
         Get.snackbar(
           'Info',
-          error,
+          error.toString(),
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: boxFillColor,
           colorText: Colors.black,
         );
+      } else {
+        clearScreen();
+        Get.offAll(() => const OAYSSignInScreen());
       }
     }
+  }
+
+  Future<void> clearScreen() async {
+    userName.text = '';
+    emailAddress.text = '';
+    password.text = '';
+    location.text = '';
   }
 }

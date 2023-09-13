@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:oays/components/oays_sigin_buttons.dart';
 import 'package:oays/components/oays_textfields.dart';
-import 'package:oays/screens/oays_signin_screen.dart';
+import 'package:oays/controllers/oays_merchant_signup_controller.dart';
 import 'package:oays/utils/helpers/color_utils.dart';
 import 'package:oays/utils/helpers/helper_widgets.dart';
 
@@ -14,23 +15,16 @@ class OAYSMerchantSignUpScreen extends StatefulWidget {
 }
 
 class _OAYSMerchantSignUpScreenState extends State<OAYSMerchantSignUpScreen> {
-  final _userNameTextController = TextEditingController();
-  final _emailIdTextController = TextEditingController();
-  final _passwordTextController = TextEditingController();
-  final _locationTextController = TextEditingController();
-  final _shopNameTextController = TextEditingController();
-  final _shopStreetTextController = TextEditingController();
-  final _shopCityTextController = TextEditingController();
-  final _shopStateTextController = TextEditingController();
-  final _shopPincodeTextController = TextEditingController();
+  final controller = Get.put(OAYSMerchantSignUpController());
+
+  @override
+  void initState() {
+    super.initState();
+    controller.clearScreen();
+  }
 
   void merchantSignUp() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => OAYSSignInScreen(),
-      ),
-    );
+    controller.createMerchant();
   }
 
   @override
@@ -66,47 +60,47 @@ class _OAYSMerchantSignUpScreenState extends State<OAYSMerchantSignUpScreen> {
                 ),
                 addVerticalSpace(15),
                 OAYSCustomTextField(
-                    controller: _userNameTextController,
+                    controller: controller.userName,
                     hintText: "user name",
                     obscureText: false),
                 addVerticalSpace(15),
                 OAYSCustomTextField(
-                    controller: _emailIdTextController,
+                    controller: controller.emailAddress,
                     hintText: "email address",
                     obscureText: false),
                 addVerticalSpace(15),
                 OAYSCustomTextField(
-                    controller: _passwordTextController,
+                    controller: controller.password,
                     hintText: "password",
                     obscureText: true),
                 addVerticalSpace(15),
                 OAYSCustomTextField(
-                    controller: _locationTextController,
+                    controller: controller.location,
                     hintText: "location",
                     obscureText: false),
                 addVerticalSpace(15),
                 OAYSCustomTextField(
-                    controller: _shopNameTextController,
+                    controller: controller.shopName,
                     hintText: "shop name",
                     obscureText: false),
                 addVerticalSpace(15),
                 OAYSCustomTextField(
-                    controller: _shopStreetTextController,
+                    controller: controller.shopStreetName,
                     hintText: "street name",
                     obscureText: false),
                 addVerticalSpace(15),
                 OAYSCustomTextField(
-                    controller: _shopCityTextController,
+                    controller: controller.shopCity,
                     hintText: "city name",
                     obscureText: false),
                 addVerticalSpace(15),
                 OAYSCustomTextField(
-                    controller: _shopStateTextController,
+                    controller: controller.shopState,
                     hintText: "state",
                     obscureText: false),
                 addVerticalSpace(15),
                 OAYSCustomTextField(
-                    controller: _shopPincodeTextController,
+                    controller: controller.shopPincode,
                     hintText: "pincode",
                     obscureText: false),
                 addVerticalSpace(30),

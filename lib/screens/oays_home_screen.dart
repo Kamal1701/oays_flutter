@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:oays/models/customer_registration.dart';
+import 'package:oays/providers/user_data_provider.dart';
 import 'package:oays/screens/oays_add_offer_screen.dart';
 import 'package:oays/screens/oays_all_offers_screen.dart';
 import 'package:oays/screens/oays_customer_profile_screen.dart';
 import 'package:oays/screens/oays_merchant_view_offer_screen.dart';
 import 'package:oays/screens/oays_offer_near_me_screen.dart';
+import 'package:oays/services/database_services.dart';
 import 'package:oays/utils/helpers/color_constant.dart';
+import 'package:provider/provider.dart';
 
 class OAYSHomeScreen extends StatefulWidget {
+  // CustomerDataProvider? dataProvider;
   const OAYSHomeScreen({super.key});
 
   @override
@@ -40,6 +45,10 @@ class _OAYSHomeScreenState extends State<OAYSHomeScreen> {
   @override
   Widget build(BuildContext context) {
     var container;
+    CustomerDataProvider dataProvider = Provider.of(context);
+    dataProvider.getUserData;
+    var userData = dataProvider.currentUserData;
+    // var userData = widget.dataProvider?.currentUserData;
     if (currentPage == DrawerOptions.offersNearme) {
       _pageTitle = "Offer Near Me";
       container = const OAYSOffersNearMeScreen();
@@ -73,18 +82,35 @@ class _OAYSHomeScreenState extends State<OAYSHomeScreen> {
               decoration: BoxDecoration(
                 color: bgdDarkColor,
               ),
-              child: const Row(
+              child: Row(
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      // FutureBuilder<CustomerRegistration?>(
+                      //     future: DatabaseService().getCustomer(),
+                      //     builder: (context, snapshot) {
+                      //       if (snapshot.connectionState ==
+                      //           ConnectionState.waiting) {
+                      //         return const CircularProgressIndicator();
+                      //       } else if (snapshot.hasData) {
+                      //         final CustomerRegistration cr = snapshot.data!;
+                      //         return Text(
+                      //           cr.userName,
+                      //           style: const TextStyle(
+                      //               fontSize: 18, fontWeight: FontWeight.bold),
+                      //         );
+                      //       } else {
+                      //         return const Text('User Name');
+                      //       }
+                      //     }),
                       Text(
-                        "kamal",
-                        style: TextStyle(
+                        userData.userName,
+                        style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                      Text(
+                      const Text(
                         "kamal@abc.com",
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.normal),

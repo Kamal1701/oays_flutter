@@ -5,7 +5,7 @@ import 'package:oays/utils/helpers/color_constant.dart';
 
 class OAYSSignInController extends GetxController {
   static OAYSSignInController get instance => Get.find();
-  final controller = Get.put(OAYSAuthenticationServices());
+  // final controller = Get.put(OAYSAuthenticationServices());
 
   final emailAddress = TextEditingController();
   final password = TextEditingController();
@@ -39,7 +39,8 @@ class OAYSSignInController extends GetxController {
         colorText: Colors.black,
       );
     } else {
-      String? error = await controller.oAYSCustomerLoginService(
+      String? error =
+          await OAYSAuthenticationServices.instance.oAYSCustomerLoginService(
         emailId: emailAddress.text.trim(),
         password: password.text.trim(),
       );

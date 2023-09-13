@@ -2,22 +2,34 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:oays/models/customer_registration.dart';
 import 'package:oays/screens/oays_home_screen.dart';
+import 'package:oays/screens/oays_signin_screen.dart';
 import 'package:oays/services/database_services.dart';
 
 class OAYSAuthenticationServices extends GetxController {
   static OAYSAuthenticationServices get instance => Get.find();
 
   final _auth = FirebaseAuth.instance;
+  Rx<User?> _firebaseUser = Rx<User?>(null);
+  String? get user => _firebaseUser.value?.email;
+  var status;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _firebaseUser.bindStream(_auth.authStateChanges());
+  }
 
   Future<String?> oAYSCustomerRegistrationService(
       String emaillId, String password, CustomerRegistration cr) async {
     try {
       await _auth
           .createUserWithEmailAndPassword(email: emaillId, password: password)
-          .then((value) {
-        DatabaseService().addCustomer(cReg: cr);
+          .then((value) async {
+        status = await DatabaseService().addCustomer(cReg: cr);
+        // print(status);
       });
-      return 'Success';
+
+      return status;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         return 'The password provided is too weak';
@@ -40,38 +52,28 @@ class OAYSAuthenticationServices extends GetxController {
           .signInWithEmailAndPassword(email: emailId, password: password)
           .then(
             (value) => Get.offAll(
-              () => const OAYSHomeScreen(),
+              () => OAYSHomeScreen(),
             ),
           );
       return null;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        // Get.snackbar("Info", 'No user found for that email. Please sign up',
-        //     snackPosition: SnackPosition.BOTTOM,
-        //     colorText: Colors.black,
-        //     backgroundColor: boxFillColor);
         return 'No user found for that email. Please sign up';
       } else if (e.code == 'wrong-password') {
-        // Get.snackbar("Info", 'Invalid password',
-        //     snackPosition: SnackPosition.BOTTOM,
-        //     colorText: Colors.black,
-        //     backgroundColor: boxFillColor);
         return 'Invalid password';
       } else {
-        // Get.snackbar("Info", e.message.toString(),
-        //     snackPosition: SnackPosition.BOTTOM,
-        //     colorText: Colors.black,
-        //     backgroundColor: boxFillColor);
         return e.message.toString();
       }
     } catch (e) {
-      // Get.snackbar("Info", e.toString(),
-      //     snackPosition: SnackPosition.BOTTOM,
-      //     colorText: Colors.black,
-      //     backgroundColor: boxFillColor);
       return e.toString();
     }
   }
 
-  Future<void> logout() async => await _auth.signOut();
+  Future<void> logout() async {
+    await _auth.signOut().then(
+          (value) => Get.offAll(
+            () => const OAYSSignInScreen(),
+          ),
+        );
+  }
 }

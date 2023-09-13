@@ -22,7 +22,11 @@ class OAYSCustomerSignUpScreen extends StatefulWidget {
 class _OAYSCustomerSignUpScreenState extends State<OAYSCustomerSignUpScreen> {
   final controller = Get.put(OAYSSignUpController());
 
-  Future<dynamic>? status;
+  @override
+  void initState() {
+    super.initState();
+    controller.clearScreen();
+  }
 
   Future<void> userSignUp() async {
     controller.createUser();
@@ -87,7 +91,7 @@ class _OAYSCustomerSignUpScreenState extends State<OAYSCustomerSignUpScreen> {
                 OAYSCustomElevatedButtons(
                   buttonText: "Sign-Up",
                   onTap: () async {
-                    status = userSignUp();
+                    userSignUp();
                   },
                 ),
               ],

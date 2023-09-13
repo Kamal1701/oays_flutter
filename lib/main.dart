@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:oays/controllers/oays_instance_binding.dart';
 import 'package:oays/firebase_options.dart';
 import 'package:oays/screens/oays_signin_screen.dart';
 import 'package:oays/utils/themes/theme_data.dart';
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      initialBinding: OAYSInstanceBinding(),
       title: 'OAYS',
       theme: ThemeClass.lightTheme,
       themeMode: ThemeMode.light,
