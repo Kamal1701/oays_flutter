@@ -22,10 +22,18 @@ class OAYSSignInController extends GetxController {
   }
 
   Future<void> login() async {
-    if (isEmailAddressEmpty.value || isPasswordEmpty.value) {
+    if (emailAddress.text.isEmpty) {
       Get.snackbar(
         "Info",
-        'Please enter your credential details.',
+        'Please enter your email address',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: boxFillColor,
+        colorText: Colors.black,
+      );
+    } else if (password.text.isEmpty) {
+      Get.snackbar(
+        "Info",
+        'Please enter your password',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: boxFillColor,
         colorText: Colors.black,

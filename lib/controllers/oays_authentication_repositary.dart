@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:oays/models/customer_registration.dart';
 import 'package:oays/screens/oays_home_screen.dart';
-import 'package:oays/utils/helpers/color_constant.dart';
+import 'package:oays/services/database_services.dart';
 
 class OAYSAuthenticationServices extends GetxController {
   static OAYSAuthenticationServices get instance => Get.find();
@@ -10,10 +10,13 @@ class OAYSAuthenticationServices extends GetxController {
   final _auth = FirebaseAuth.instance;
 
   Future<String?> oAYSCustomerRegistrationService(
-      String emaillId, String password) async {
+      String emaillId, String password, CustomerRegistration cr) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
-          email: emaillId, password: password);
+      await _auth
+          .createUserWithEmailAndPassword(email: emaillId, password: password)
+          .then((value) {
+        DatabaseService().addCustomer(cReg: cr);
+      });
       return 'Success';
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -37,9 +40,10 @@ class OAYSAuthenticationServices extends GetxController {
           .signInWithEmailAndPassword(email: emailId, password: password)
           .then(
             (value) => Get.offAll(
-              const OAYSHomeScreen(),
+              () => const OAYSHomeScreen(),
             ),
           );
+      return null;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         // Get.snackbar("Info", 'No user found for that email. Please sign up',

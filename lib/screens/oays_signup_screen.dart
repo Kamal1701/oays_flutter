@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oays/components/oays_sigin_buttons.dart';
 import 'package:oays/components/oays_textfields.dart';
+import 'package:oays/controllers/oays_signup_screen_controller.dart';
 import 'package:oays/models/customer_registration.dart';
 import 'package:oays/screens/oays_signin_screen.dart';
 import 'package:oays/services/auth_services.dart';
@@ -19,69 +20,12 @@ class OAYSCustomerSignUpScreen extends StatefulWidget {
 }
 
 class _OAYSCustomerSignUpScreenState extends State<OAYSCustomerSignUpScreen> {
-  final _userNameTextController = TextEditingController();
-  final _emailTextController = TextEditingController();
-  final _passwordTextController = TextEditingController();
-  final _locationTextController = TextEditingController();
+  final controller = Get.put(OAYSSignUpController());
+
   Future<dynamic>? status;
 
-  Future userSignUp() async {
-    if (_emailTextController.text.isNotEmpty &&
-        _passwordTextController.text.isNotEmpty &&
-        _userNameTextController.text.isNotEmpty &&
-        _locationTextController.text.isNotEmpty) {
-      // print(_emailTextController.text.toString());
-
-      final message = await AuthServices().oAYSCustomerRegistrationService(
-        emailId: _emailTextController.text.toString(),
-        password: _passwordTextController.text.toString(),
-      );
-      if (message!.contains('Success')) {
-        CustomerRegistration custReg = CustomerRegistration(
-            _userNameTextController.text,
-            _locationTextController.text,
-            false,
-            'NA',
-            '',
-            '',
-            '',
-            '');
-        // String cReg = jsonEncode(custReg);
-        final addCustomerStatus =
-            await DatabaseService().addCustomer(cReg: custReg);
-        return addCustomerStatus;
-      }
-
-      if (!message.contains('Success') && mounted) {
-        Get.snackbar(
-          "Info",
-          message.toString(),
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: boxFillColor,
-          colorText: Colors.black,
-        );
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   SnackBar(
-        //     content: Text(message),
-        //   ),
-        // );
-      }
-    } else {
-      Get.snackbar(
-        "Info",
-        "Please fill the details",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: boxFillColor,
-        colorText: Colors.black,
-      );
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   const SnackBar(
-      //     content: Text("Please fill all the details"),
-      //     // shape: RoundedRectangleBorder(borderRadiusBorderRadius.circular(8.0),),
-      //   ),
-      // );
-      // print(jsonEncode(custReg).toString());
-    }
+  Future<void> userSignUp() async {
+    controller.createUser();
   }
 
   @override
@@ -117,25 +61,25 @@ class _OAYSCustomerSignUpScreenState extends State<OAYSCustomerSignUpScreen> {
                 ),
                 addVerticalSpace(30),
                 OAYSCustomTextField(
-                  controller: _userNameTextController,
+                  controller: controller.userName,
                   hintText: "user name",
                   obscureText: false,
                 ),
                 addVerticalSpace(15),
                 OAYSCustomTextField(
-                  controller: _emailTextController,
+                  controller: controller.emailAddress,
                   hintText: "email id",
                   obscureText: false,
                 ),
                 addVerticalSpace(15),
                 OAYSCustomTextField(
-                  controller: _passwordTextController,
+                  controller: controller.password,
                   hintText: "password",
                   obscureText: true,
                 ),
                 addVerticalSpace(15),
                 OAYSCustomTextField(
-                  controller: _locationTextController,
+                  controller: controller.location,
                   hintText: "location",
                   obscureText: false,
                 ),
@@ -144,17 +88,6 @@ class _OAYSCustomerSignUpScreenState extends State<OAYSCustomerSignUpScreen> {
                   buttonText: "Sign-Up",
                   onTap: () async {
                     status = userSignUp();
-                    if (status.toString().contains('Success')) {
-                      Get.to(
-                        () => const OAYSSignInScreen(),
-                      );
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const OAYSSignInScreen(),
-                      //   ),
-                      // );
-                    }
                   },
                 ),
               ],

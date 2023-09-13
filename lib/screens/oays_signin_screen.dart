@@ -25,18 +25,7 @@ class _OAYSSignInScreenState extends State<OAYSSignInScreen> {
   Future userSignIn() async {
     controller.isEmailEmptyValidation(controller.emailAddress.text);
     controller.isPasswordEmptyValidation(controller.password.text);
-    // if (controller.isEmailAddressEmpty.value ||
-    //     controller.isPasswordEmpty.value) {
-    //   return Get.snackbar(
-    //     "Info",
-    //     'Please enter your credential',
-    //     snackPosition: SnackPosition.BOTTOM,
-    //     backgroundColor: boxFillColor,
-    //     colorText: Colors.black,
-    //   );
-    // } else {
     controller.login();
-    // }
   }
 
   void _onButtonPressed() {

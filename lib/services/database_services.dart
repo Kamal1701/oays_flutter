@@ -1,10 +1,10 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:oays/models/customer_registration.dart';
+import 'package:oays/screens/oays_signin_screen.dart';
 
-class DatabaseService {
+class DatabaseService extends GetxController {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final String userId = FirebaseAuth.instance.currentUser!.uid;
   String status = '';
@@ -18,7 +18,7 @@ class DatabaseService {
       CollectionReference collectRef = _db.collection("CustomerProfile");
       await collectRef.doc(userId).set(cReg.toMap()).whenComplete(() {
         collectRef.doc(userId).update(timeTracker);
-        status = 'Success';
+        Get.offAll(() => const OAYSSignInScreen());
       });
       return status;
     } on FirebaseException catch (e) {
