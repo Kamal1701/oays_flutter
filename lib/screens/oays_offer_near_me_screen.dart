@@ -11,7 +11,7 @@ class OAYSOffersNearMeScreen extends StatefulWidget {
 
 class _OAYSOffersNearMeScreenState extends State<OAYSOffersNearMeScreen> {
   final List<Map> myProducts = List.generate(
-    10,
+    2,
     (index) => {"id": index, "name": "Product $index"},
   );
 

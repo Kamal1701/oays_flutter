@@ -43,4 +43,21 @@ class DatabaseService {
     // return CustomerRegistration.fromMap(
     //     snapshot.data() as Map<String, dynamic>);
   }
+
+  // Future<DocumentSnapshot?> getCustomer() async {
+  //   try {
+  //     DocumentSnapshot snapshot =
+  //         await _db.collection("CustomerProfile").doc(userId).get();
+  //     if (snapshot.exists) {
+  //       // final Map<String, dynamic> data =
+  //       //     snapshot.data() as Map<String, dynamic>;
+  //       return snapshot;
+  //     }
+  //   } catch (e) {
+  //     //
+  //   }
+  //   return null;
+  //   // return CustomerRegistration.fromMap(
+  //   //     snapshot.data() as Map<String, dynamic>);
+  // }
 }

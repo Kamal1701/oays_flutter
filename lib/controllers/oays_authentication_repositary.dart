@@ -52,7 +52,7 @@ class OAYSAuthenticationServices extends GetxController {
           .signInWithEmailAndPassword(email: emailId, password: password)
           .then(
             (value) => Get.offAll(
-              () => OAYSHomeScreen(),
+              () => const OAYSHomeScreen(),
             ),
           );
       return null;
