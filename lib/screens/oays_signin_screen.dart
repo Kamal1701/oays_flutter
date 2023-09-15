@@ -20,12 +20,27 @@ class OAYSSignInScreen extends StatefulWidget {
 // ignore: camel_case_types
 class _OAYSSignInScreenState extends State<OAYSSignInScreen> {
   final controller = Get.put(OAYSSignInController());
-  Future<dynamic>? getStatus;
 
   Future userSignIn() async {
-    controller.isEmailEmptyValidation(controller.emailAddress.text);
-    controller.isPasswordEmptyValidation(controller.password.text);
-    controller.login();
+    // controller.isEmailEmptyValidation(controller.emailAddress.text);
+    // controller.isPasswordEmptyValidation(controller.password.text);
+    controller.login()?.then((value) {
+      setState(() {
+        if (value == 'Success') {
+          Get.snackbar('Info', value,
+              snackPosition: SnackPosition.BOTTOM,
+              colorText: Colors.black,
+              backgroundColor: boxFillColor);
+          controller.isLoginSuccess.value = false;
+        } else {
+          Get.snackbar('Info', value,
+              snackPosition: SnackPosition.BOTTOM,
+              colorText: Colors.black,
+              backgroundColor: boxFillColor);
+          controller.isLoginSuccess.value = false;
+        }
+      });
+    });
   }
 
   void _onButtonPressed() {
@@ -94,12 +109,32 @@ class _OAYSSignInScreenState extends State<OAYSSignInScreen> {
                   ),
                 ),
                 addVerticalSpace(20),
-                OAYSCustomElevatedButtons(
-                  buttonText: "Sign In",
-                  onTap: () async {
-                    userSignIn();
-                  },
-                ),
+                // OAYSCustomElevatedButtons(
+                //   buttonText: "Sign In",
+                //   onTap: () async {
+                //     // print(controller.isLoginSuccess.value);
+                //     // controller.isLoginSuccess.value
+                //     //     ? const CircularProgressIndicator()
+                //     //     : const CircularProgressIndicator();
+                //     userSignIn();
+                //   },
+                // ),
+
+                controller.isLoginSuccess.value
+                    ? const CircularProgressIndicator()
+                    : OAYSCustomElevatedButtons(
+                        buttonText: "Sign In",
+                        onTap: () async {
+                          print(controller.isLoginSuccess.value);
+                          setState(() {
+                            if (controller.isLoginSuccess.value) {
+                              controller.isLoginSuccess.value = true;
+                              // controller.isLoading.value = true;
+                            }
+                          });
+                          userSignIn();
+                        },
+                      ),
                 addVerticalSpace(20),
                 signUpOption(),
                 addVerticalSpace(250),

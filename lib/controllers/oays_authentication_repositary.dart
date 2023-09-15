@@ -55,7 +55,7 @@ class OAYSAuthenticationServices extends GetxController {
               () => const OAYSHomeScreen(),
             ),
           );
-      return null;
+      return 'Success';
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         return 'No user found for that email. Please sign up';

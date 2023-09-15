@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:oays/components/oays_textfields.dart';
+import 'package:oays/controllers/oays_add_offer_screen_controller.dart';
 import 'package:oays/utils/helpers/color_constant.dart';
 import 'package:oays/utils/helpers/color_utils.dart';
 import 'package:oays/utils/helpers/helper_widgets.dart';
@@ -18,30 +20,9 @@ class OAYSAddOfferScreen extends StatefulWidget {
 }
 
 class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
-  final _offerProductNameController = TextEditingController();
-  final _offerProductBrandController = TextEditingController();
-  final _offerProductCategoryController = TextEditingController();
-  final _offerProductSubCategoryController = TextEditingController();
-  final _offerProductActualPriceController = TextEditingController();
-  final _offerProductDiscountPriceController = TextEditingController();
-  final _offerProductStartDateController = TextEditingController();
-  final _offerProductEndDateController = TextEditingController();
-  final _offerProductWeightController = TextEditingController();
-  final _offerProductDiscountPercentController = TextEditingController();
-  final _offerProductDescriptionController = TextEditingController();
-  // final _offerProductNameController = TextEditingController();
-  // final _offerProductNameController = TextEditingController();
-  // final _offerProductNameController = TextEditingController();
-  String _imagePath = '';
-  bool _isChecked = false;
-  bool _isGestureDisabled = false;
-  DateTime _dateTime = DateTime.now();
+  final controller = Get.put(OAYSAddOfferController());
 
-  @override
-  void setState(VoidCallback fn) {
-    super.setState(fn);
-    // _offerProductStartDateController.text = _dateTime.toString();
-  }
+  DateTime _dateTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -67,23 +48,24 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
             children: [
               addVerticalSpace(20),
               GestureDetector(
-                onTap: _isGestureDisabled
+                onTap: controller.isGestureTapDisabled.value
                     ? null
                     : () async {
-                        _imagePath = await _selectImageFromGallery();
-                        if (_imagePath != '') {
+                        controller.productImagePath.value =
+                            await _selectImageFromGallery();
+                        if (controller.productImagePath.value != '') {
                           setState(() {
-                            if (_isChecked) {
-                              _isGestureDisabled = true;
+                            if (controller.isNoProductImageChecked.value) {
+                              controller.isGestureTapDisabled.value = true;
                             }
                           });
                         }
                       },
-                child: _imagePath == ''
+                child: controller.productImagePath.value == ''
                     ? Image.asset('assets/images/image_placeholder.png',
                         height: 200, width: 200, fit: BoxFit.fill)
                     : Image.file(
-                        File(_imagePath),
+                        File(controller.productImagePath.value),
                         height: 200,
                         width: 200,
                         fit: BoxFit.fill,
@@ -97,17 +79,10 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                     child: Checkbox(
                       checkColor: Colors.white,
                       fillColor: MaterialStateProperty.all(bgdDarkColor),
-                      value: _isChecked,
-                      onChanged: (bool? value) {
+                      value: controller.isNoProductImageChecked.value,
+                      onChanged: (value) {
                         setState(() {
-                          _isChecked = value!;
-                          // print(_isChecked);
-                          if (_isChecked) {
-                            _imagePath = '';
-                            _isGestureDisabled = true;
-                          } else {
-                            _isGestureDisabled = false;
-                          }
+                          controller.setNoProductImage(value);
                         });
                       },
                     ),
@@ -125,13 +100,13 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                 ],
               ),
               OAYSCustomTextField(
-                controller: _offerProductNameController,
+                controller: controller.offerProductNameController,
                 hintText: "product name",
                 obscureText: false,
               ),
               addVerticalSpace(10),
               OAYSCustomTextField(
-                controller: _offerProductBrandController,
+                controller: controller.offerProductBrandController,
                 hintText: "brand name",
                 obscureText: false,
               ),
@@ -142,7 +117,7 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
                       child: OAYSCustomTextField(
-                        controller: _offerProductCategoryController,
+                        controller: controller.offerProductCategoryController,
                         hintText: "category",
                         obscureText: false,
                       ),
@@ -152,7 +127,8 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
                       child: OAYSCustomTextField(
-                        controller: _offerProductSubCategoryController,
+                        controller:
+                            controller.offerProductSubCategoryController,
                         hintText: "sub category",
                         obscureText: false,
                       ),
@@ -167,7 +143,8 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
                       child: OAYSCustomTextField(
-                        controller: _offerProductActualPriceController,
+                        controller:
+                            controller.offerProductActualPriceController,
                         hintText: "actual price",
                         obscureText: false,
                       ),
@@ -177,7 +154,8 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
                       child: OAYSCustomTextField(
-                        controller: _offerProductDiscountPriceController,
+                        controller:
+                            controller.offerProductDiscountPriceController,
                         hintText: "discount price",
                         obscureText: false,
                       ),
@@ -201,12 +179,12 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                             color: hintTextColor,
                           ),
                         ),
-                        controller: _offerProductStartDateController,
+                        controller: controller.offerProductStartDateController,
                         readOnly: true,
                         onTap: () async {
                           _showDatePicker();
                           if (_dateTime != null) {
-                            _offerProductStartDateController.text =
+                            controller.offerProductStartDateController.text =
                                 _getFormattedDate(_dateTime);
                           }
                         },
@@ -226,12 +204,12 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                             color: hintTextColor,
                           ),
                         ),
-                        controller: _offerProductEndDateController,
+                        controller: controller.offerProductEndDateController,
                         readOnly: true,
                         onTap: () async {
                           _showDatePicker();
                           if (_dateTime != null) {
-                            _offerProductEndDateController.text =
+                            controller.offerProductEndDateController.text =
                                 _getFormattedDate(_dateTime);
                           }
                         },
@@ -247,7 +225,7 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
                       child: OAYSCustomTextField(
-                        controller: _offerProductWeightController,
+                        controller: controller.offerProductWeightController,
                         hintText: "product weight",
                         obscureText: false,
                       ),
@@ -257,7 +235,8 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
                       child: OAYSCustomTextField(
-                        controller: _offerProductDiscountPercentController,
+                        controller:
+                            controller.offerProductDiscountPercentController,
                         hintText: "discount %",
                         obscureText: false,
                       ),
@@ -267,7 +246,7 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
               ),
               addVerticalSpace(10),
               TextField(
-                controller: _offerProductDescriptionController,
+                controller: controller.offerProductDescriptionController,
                 decoration: const InputDecoration(
                   // labelText: "product descrtion",
                   // floatingLabelAlignment: FloatingLabelAlignment.start,
@@ -281,7 +260,9 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(30, 0, 15, 0),
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          controller.addProduct();
+                        },
                         child: const Text("Add"),
                       ),
                     ),
@@ -290,7 +271,14 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(15, 0, 30, 0),
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          setState(() {
+                            controller.isNoProductImageChecked.value = false;
+                            controller.productImagePath.value = '';
+                            controller.isGestureTapDisabled.value = false;
+                          });
+                          controller.cancelProduct();
+                        },
                         child: const Text("Cancel"),
                       ),
                     ),
@@ -306,10 +294,12 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
   }
 
   _selectImageFromGallery() async {
-    XFile? file = await ImagePicker()
+    // XFile? file = await ImagePicker()
+    //     .pickImage(source: ImageSource.gallery, imageQuality: 50);
+    controller.productImageFile = await ImagePicker()
         .pickImage(source: ImageSource.gallery, imageQuality: 50);
-    if (file != null) {
-      return file.path;
+    if (controller.productImageFile != null) {
+      return controller.productImageFile?.path;
     } else {
       return '';
     }

@@ -1,7 +1,10 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oays/components/oays_sigin_buttons.dart';
 import 'package:oays/components/oays_textfields.dart';
+import 'package:oays/controllers/oays_databaseservice_controller.dart';
 import 'package:oays/controllers/oays_signup_screen_controller.dart';
 import 'package:oays/models/customer_registration.dart';
 import 'package:oays/screens/oays_signin_screen.dart';
@@ -91,6 +94,9 @@ class _OAYSCustomerSignUpScreenState extends State<OAYSCustomerSignUpScreen> {
                 OAYSCustomElevatedButtons(
                   buttonText: "Sign-Up",
                   onTap: () async {
+                    controller.isSuccess.value
+                        ? ''
+                        : const CircularProgressIndicator();
                     userSignUp();
                   },
                 ),

@@ -7,6 +7,7 @@ import 'package:oays/utils/helpers/color_constant.dart';
 
 class OAYSSignUpController extends GetxController {
   static OAYSSignUpController get instance => Get.find();
+
   // final controller = Get.put(OAYSAuthenticationServices());
 
   final userName = TextEditingController();
@@ -18,6 +19,8 @@ class OAYSSignUpController extends GetxController {
   final isEmailAddressEmpty = true.obs;
   final isPasswordEmpty = true.obs;
   final isLocation = true.obs;
+
+  final isSuccess = false.obs;
 
   isUserNameEmptyValidation(String userName) {
     isUserNameEmpty.value = userName.isEmpty;
@@ -92,8 +95,6 @@ class OAYSSignUpController extends GetxController {
       String? error = await OAYSAuthenticationServices.instance
           .oAYSCustomerRegistrationService(
               emailAddress.text.trim(), password.text.trim(), custReg);
-      // print('create user:');
-      // print(error);
       if (error != 'Success') {
         Get.snackbar(
           'Info',
@@ -103,6 +104,7 @@ class OAYSSignUpController extends GetxController {
           colorText: Colors.black,
         );
       } else {
+        isSuccess.value = true;
         clearScreen();
         Get.offAll(() => const OAYSSignInScreen());
       }
