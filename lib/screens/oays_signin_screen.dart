@@ -22,23 +22,21 @@ class _OAYSSignInScreenState extends State<OAYSSignInScreen> {
   final controller = Get.put(OAYSSignInController());
 
   Future userSignIn() async {
-    // controller.isEmailEmptyValidation(controller.emailAddress.text);
-    // controller.isPasswordEmptyValidation(controller.password.text);
     controller.login()?.then((value) {
       setState(() {
-        if (value == 'Success') {
-          Get.snackbar('Info', value,
-              snackPosition: SnackPosition.BOTTOM,
-              colorText: Colors.black,
-              backgroundColor: boxFillColor);
-          controller.isLoginSuccess.value = false;
-        } else {
-          Get.snackbar('Info', value,
-              snackPosition: SnackPosition.BOTTOM,
-              colorText: Colors.black,
-              backgroundColor: boxFillColor);
-          controller.isLoginSuccess.value = false;
-        }
+        // if (value == 'Success') {
+        Get.snackbar('Info', value,
+            snackPosition: SnackPosition.BOTTOM,
+            colorText: Colors.black,
+            backgroundColor: boxFillColor);
+        controller.isLoginSuccess.value = false;
+        // } else {
+        //   Get.snackbar('Info', value,
+        //       snackPosition: SnackPosition.BOTTOM,
+        //       colorText: Colors.black,
+        //       backgroundColor: boxFillColor);
+        //   controller.isLoginSuccess.value = false;
+        // }
       });
     });
   }
@@ -54,96 +52,106 @@ class _OAYSSignInScreenState extends State<OAYSSignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              hexStringToColor("edd38c"),
-              hexStringToColor("ebc86a"),
-              hexStringToColor("e6b943")
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(
-                20, MediaQuery.of(context).size.height * 0.2, 20, 0),
-            child: Column(
-              children: <Widget>[
-                // logoWidget("assets/images/oays.webp"),
-                addVerticalSpace(30),
-                OAYSCustomTextField(
-                  controller: controller.emailAddress,
-                  hintText: "user email",
-                  obscureText: false,
-                ),
-                addVerticalSpace(10),
-                OAYSCustomTextField(
-                  controller: controller.password,
-                  hintText: "password",
-                  obscureText: true,
-                ),
-                // addVerticalSpace(0),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: _onButtonPressed,
-                        child: const Text(
-                          "Forgot Password",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                addVerticalSpace(20),
-                // OAYSCustomElevatedButtons(
-                //   buttonText: "Sign In",
-                //   onTap: () async {
-                //     // print(controller.isLoginSuccess.value);
-                //     // controller.isLoginSuccess.value
-                //     //     ? const CircularProgressIndicator()
-                //     //     : const CircularProgressIndicator();
-                //     userSignIn();
-                //   },
-                // ),
+    return Stack(
+      children: [
+        Scaffold(
+          body: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  hexStringToColor("edd38c"),
+                  hexStringToColor("ebc86a"),
+                  hexStringToColor("e6b943")
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(
+                    20, MediaQuery.of(context).size.height * 0.2, 20, 0),
+                child: Column(
+                  children: <Widget>[
+                    // logoWidget("assets/images/oays.webp"),
 
-                controller.isLoginSuccess.value
-                    ? const CircularProgressIndicator()
-                    : OAYSCustomElevatedButtons(
-                        buttonText: "Sign In",
-                        onTap: () async {
-                          print(controller.isLoginSuccess.value);
-                          setState(() {
-                            if (controller.isLoginSuccess.value) {
-                              controller.isLoginSuccess.value = true;
-                              // controller.isLoading.value = true;
-                            }
-                          });
-                          userSignIn();
-                        },
+                    addVerticalSpace(30),
+                    OAYSCustomTextField(
+                      controller: controller.emailAddress,
+                      hintText: "user email",
+                      obscureText: false,
+                    ),
+                    addVerticalSpace(10),
+                    OAYSCustomTextField(
+                      controller: controller.password,
+                      hintText: "password",
+                      obscureText: true,
+                    ),
+                    // addVerticalSpace(0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: _onButtonPressed,
+                            child: const Text(
+                              "Forgot Password",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                addVerticalSpace(20),
-                signUpOption(),
-                addVerticalSpace(250),
-                signUpAsMerchantOption(),
-              ],
+                    ),
+                    addVerticalSpace(20),
+                    // controller.isLoginSuccess.value
+                    //     ? ModalBarrier(
+                    //         color: Colors.grey.withOpacity(0.5),
+                    //         dismissible: false,
+                    //       )
+                    //     : Container(),
+                    // controller.isLoginSuccess.value
+                    //     ? const CircularProgressIndicator()
+                    //     :
+                    OAYSCustomElevatedButtons(
+                      buttonText: "Sign In",
+                      onTap: () async {
+                        setState(() {
+                          controller.isLoginSuccess.value =
+                              controller.isLoginSuccess.value ? true : false;
+                        });
+                        userSignIn();
+                      },
+                    ),
+                    addVerticalSpace(20),
+                    signUpOption(),
+                    addVerticalSpace(250),
+                    signUpAsMerchantOption(),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
-      ),
+        if (controller.isLoginSuccess.value)
+          const Opacity(
+            opacity: 0.5,
+            child: ModalBarrier(
+              dismissible: false,
+              color: Colors.grey,
+            ),
+          ),
+        if (controller.isLoginSuccess.value)
+          const Center(
+            child: CircularProgressIndicator(),
+          ),
+      ],
     );
   }
 

@@ -32,7 +32,15 @@ class _OAYSCustomerSignUpScreenState extends State<OAYSCustomerSignUpScreen> {
   }
 
   Future<void> userSignUp() async {
-    controller.createUser();
+    controller.createUser()?.then((value) {
+      setState(() {
+        Get.snackbar('Info', value,
+            snackPosition: SnackPosition.BOTTOM,
+            colorText: Colors.black,
+            backgroundColor: boxFillColor);
+        controller.isRegisterSuccess.value = false;
+      });
+    });
   }
 
   @override
@@ -91,15 +99,20 @@ class _OAYSCustomerSignUpScreenState extends State<OAYSCustomerSignUpScreen> {
                   obscureText: false,
                 ),
                 addVerticalSpace(25),
-                OAYSCustomElevatedButtons(
-                  buttonText: "Sign-Up",
-                  onTap: () async {
-                    controller.isSuccess.value
-                        ? ''
-                        : const CircularProgressIndicator();
-                    userSignUp();
-                  },
-                ),
+                controller.isRegisterSuccess.value
+                    ? const CircularProgressIndicator()
+                    : OAYSCustomElevatedButtons(
+                        buttonText: "Sign-Up",
+                        onTap: () async {
+                          setState(() {
+                            controller.isRegisterSuccess.value =
+                                controller.isRegisterSuccess.value
+                                    ? true
+                                    : false;
+                          });
+                          userSignUp();
+                        },
+                      ),
               ],
             ),
           ),

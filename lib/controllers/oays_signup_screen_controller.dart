@@ -8,7 +8,7 @@ import 'package:oays/utils/helpers/color_constant.dart';
 class OAYSSignUpController extends GetxController {
   static OAYSSignUpController get instance => Get.find();
 
-  // final controller = Get.put(OAYSAuthenticationServices());
+  final isRegisterSuccess = false.obs;
 
   final userName = TextEditingController();
   final emailAddress = TextEditingController();
@@ -20,69 +20,24 @@ class OAYSSignUpController extends GetxController {
   final isPasswordEmpty = true.obs;
   final isLocation = true.obs;
 
-  final isSuccess = false.obs;
+  // final isSuccess = false.obs;
 
-  isUserNameEmptyValidation(String userName) {
-    isUserNameEmpty.value = userName.isEmpty;
-  }
-
-  isEmailAddressEmptyValidation(String emailId) {
-    isEmailAddressEmpty.value = emailId.isEmpty;
-  }
-
-  isPasswordValidation(String password) {
-    isPasswordEmpty.value = password.isEmpty;
-  }
-
-  isLocationValidation(String loc) {
-    isLocation.value = loc.isEmpty;
-  }
-
-  Future<void> createUser() async {
+  Future<String>? createUser() async {
     if (userName.text.isEmpty &&
         emailAddress.text.isEmpty &&
         password.text.isEmpty &&
         location.text.isEmpty) {
-      Get.snackbar(
-        'Info',
-        'Please enter requested information.',
-        backgroundColor: boxFillColor,
-        colorText: Colors.black,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      return 'Please enter requested information.';
     } else if (userName.text.isEmpty) {
-      Get.snackbar(
-        'Info',
-        'Please enter your username.',
-        backgroundColor: boxFillColor,
-        colorText: Colors.black,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      return 'Please enter your username.';
     } else if (emailAddress.text.isEmpty) {
-      Get.snackbar(
-        'Info',
-        'Please enter your email address.',
-        backgroundColor: boxFillColor,
-        colorText: Colors.black,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      return 'Please enter your email address.';
     } else if (password.text.isEmpty) {
-      Get.snackbar(
-        'Info',
-        'Please enter password.',
-        backgroundColor: boxFillColor,
-        colorText: Colors.black,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      return 'Please enter password.';
     } else if (location.text.isEmpty) {
-      Get.snackbar(
-        'Info',
-        'Please enter your location or city.',
-        backgroundColor: boxFillColor,
-        colorText: Colors.black,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      return 'Please enter your location or city.';
     } else {
+      isRegisterSuccess.value = true;
       CustomerRegistration custReg = CustomerRegistration(
           userName.text.toString(),
           location.text.toString(),
@@ -96,17 +51,11 @@ class OAYSSignUpController extends GetxController {
           .oAYSCustomerRegistrationService(
               emailAddress.text.trim(), password.text.trim(), custReg);
       if (error != 'Success') {
-        Get.snackbar(
-          'Info',
-          error.toString(),
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: boxFillColor,
-          colorText: Colors.black,
-        );
+        return error.toString();
       } else {
-        isSuccess.value = true;
         clearScreen();
         Get.offAll(() => const OAYSSignInScreen());
+        return 'User created successfully...';
       }
     }
   }
