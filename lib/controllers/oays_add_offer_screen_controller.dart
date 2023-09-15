@@ -15,6 +15,7 @@ class OAYSAddOfferController extends GetxController {
   final isGestureTapDisabled = false.obs;
   final productImagePath = ''.obs;
   final productImageUrl = ''.obs;
+  final isProductSuccess = false.obs;
   late XFile? productImageFile;
 
   final offerProductNameController = TextEditingController();
@@ -40,7 +41,7 @@ class OAYSAddOfferController extends GetxController {
     }
   }
 
-  Future<void> addProduct() async {
+  Future<String>? addProduct() async {
     if (offerProductNameController.text.isEmpty ||
         offerProductBrandController.text.isEmpty ||
         offerProductCategoryController.text.isEmpty ||
@@ -52,14 +53,16 @@ class OAYSAddOfferController extends GetxController {
         offerProductEndDateController.text.isEmpty ||
         offerProductWeightController.text.isEmpty ||
         offerProductDescriptionController.text.isEmpty) {
-      Get.snackbar(
-        'Info',
-        'Please fill the required details.',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: boxFillColor,
-        colorText: Colors.black,
-      );
+      // Get.snackbar(
+      //   'Info',
+      //   'Please fill the required details.',
+      //   snackPosition: SnackPosition.BOTTOM,
+      //   backgroundColor: boxFillColor,
+      //   colorText: Colors.black,
+      // );
+      return 'Please fill the required details.';
     } else {
+      isProductSuccess.value = true;
       if (isNoProductImageChecked.value) {
         productImageUrl.value = '';
       } else {
@@ -87,18 +90,20 @@ class OAYSAddOfferController extends GetxController {
           offerProductDescriptionController.text.trim());
       String? status = await DatabaseService().addOfferProduct(op: op);
       if (status == 'Success') {
-        Get.snackbar('Info', 'Offer Added Successfully.',
-            snackPosition: SnackPosition.BOTTOM,
-            colorText: Colors.black,
-            backgroundColor: boxFillColor);
+        // Get.snackbar('Info', 'Offer Added Successfully.',
+        //     snackPosition: SnackPosition.BOTTOM,
+        //     colorText: Colors.black,
+        //     backgroundColor: boxFillColor);
+        clearScreen();
+        return 'Offer Added Successfully...';
       } else {
-        Get.snackbar('Info', status,
-            snackPosition: SnackPosition.BOTTOM,
-            colorText: Colors.black,
-            backgroundColor: boxFillColor);
+        // Get.snackbar('Info', status,
+        //     snackPosition: SnackPosition.BOTTOM,
+        //     colorText: Colors.black,
+        //     backgroundColor: boxFillColor);
+        clearScreen();
+        return status;
       }
-
-      clearScreen();
     }
   }
 

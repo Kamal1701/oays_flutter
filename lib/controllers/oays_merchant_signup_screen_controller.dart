@@ -8,6 +8,8 @@ import 'package:oays/utils/helpers/color_constant.dart';
 class OAYSMerchantSignUpController extends GetxController {
   static OAYSMerchantSignUpController get instance => Get.find();
 
+  final isMerchantRegisterSuccess = false.obs;
+
   final userName = TextEditingController();
   final emailAddress = TextEditingController();
   final password = TextEditingController();
@@ -28,7 +30,7 @@ class OAYSMerchantSignUpController extends GetxController {
   // final isShopStateEmpty = true.obs;
   // final isShopPincode = true.obs;
 
-  Future<void> createMerchant() async {
+  Future<String>? createMerchant() async {
     if (userName.text.isEmpty ||
         emailAddress.text.isEmpty ||
         password.text.isEmpty ||
@@ -38,14 +40,16 @@ class OAYSMerchantSignUpController extends GetxController {
         shopCity.text.isEmpty ||
         shopState.text.isEmpty ||
         shopPincode.text.isEmpty) {
-      Get.snackbar(
-        'Info',
-        'Please enter requested details.',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: boxFillColor,
-        colorText: Colors.black,
-      );
+      // Get.snackbar(
+      //   'Info',
+      //   'Please enter requested details.',
+      //   snackPosition: SnackPosition.BOTTOM,
+      //   backgroundColor: boxFillColor,
+      //   colorText: Colors.black,
+      // );
+      return 'Please enter requested details.';
     } else {
+      isMerchantRegisterSuccess.value = true;
       CustomerRegistration custReg = CustomerRegistration(
           userName.text.toString(),
           location.text.toString(),
@@ -59,16 +63,18 @@ class OAYSMerchantSignUpController extends GetxController {
           .oAYSCustomerRegistrationService(
               emailAddress.text.trim(), password.text.trim(), custReg);
       if (error != 'Success') {
-        Get.snackbar(
-          'Info',
-          error.toString(),
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: boxFillColor,
-          colorText: Colors.black,
-        );
+        // Get.snackbar(
+        //   'Info',
+        //   error.toString(),
+        //   snackPosition: SnackPosition.BOTTOM,
+        //   backgroundColor: boxFillColor,
+        //   colorText: Colors.black,
+        // );
+        return error.toString();
       } else {
         clearScreen();
         Get.offAll(() => const OAYSSignInScreen());
+        return 'Merchant User created successfully...';
       }
     }
   }

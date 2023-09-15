@@ -26,270 +26,309 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      // color: boxFillColor,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            hexStringToColor("edd38c"),
-            hexStringToColor("edd38c"),
-            hexStringToColor("edd38c")
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            children: [
-              addVerticalSpace(20),
-              GestureDetector(
-                onTap: controller.isGestureTapDisabled.value
-                    ? null
-                    : () async {
-                        controller.productImagePath.value =
-                            await _selectImageFromGallery();
-                        if (controller.productImagePath.value != '') {
-                          setState(() {
-                            if (controller.isNoProductImageChecked.value) {
-                              controller.isGestureTapDisabled.value = true;
+    return Stack(
+      children: [
+        Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          // color: boxFillColor,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                hexStringToColor("edd38c"),
+                hexStringToColor("edd38c"),
+                hexStringToColor("edd38c")
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                children: [
+                  addVerticalSpace(20),
+                  GestureDetector(
+                    onTap: controller.isGestureTapDisabled.value
+                        ? null
+                        : () async {
+                            controller.productImagePath.value =
+                                await _selectImageFromGallery();
+                            if (controller.productImagePath.value != '') {
+                              setState(() {
+                                if (controller.isNoProductImageChecked.value) {
+                                  controller.isGestureTapDisabled.value = true;
+                                }
+                              });
                             }
-                          });
-                        }
-                      },
-                child: controller.productImagePath.value == ''
-                    ? Image.asset('assets/images/image_placeholder.png',
-                        height: 200, width: 200, fit: BoxFit.fill)
-                    : Image.file(
-                        File(controller.productImagePath.value),
-                        height: 200,
-                        width: 200,
-                        fit: BoxFit.fill,
-                      ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Checkbox(
-                      checkColor: Colors.white,
-                      fillColor: MaterialStateProperty.all(bgdDarkColor),
-                      value: controller.isNoProductImageChecked.value,
-                      onChanged: (value) {
-                        setState(() {
-                          controller.setNoProductImage(value);
-                        });
-                      },
-                    ),
+                          },
+                    child: controller.productImagePath.value == ''
+                        ? Image.asset('assets/images/image_placeholder.png',
+                            height: 200, width: 200, fit: BoxFit.fill)
+                        : Image.file(
+                            File(controller.productImagePath.value),
+                            height: 200,
+                            width: 200,
+                            fit: BoxFit.fill,
+                          ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Text(
-                      "No product image",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: Checkbox(
+                          checkColor: Colors.white,
+                          fillColor: MaterialStateProperty.all(bgdDarkColor),
+                          value: controller.isNoProductImageChecked.value,
+                          onChanged: (value) {
+                            setState(() {
+                              controller.setNoProductImage(value);
+                            });
+                          },
+                        ),
                       ),
-                    ),
-                  ),
-                ],
-              ),
-              OAYSCustomTextField(
-                controller: controller.offerProductNameController,
-                hintText: "product name",
-                obscureText: false,
-              ),
-              addVerticalSpace(10),
-              OAYSCustomTextField(
-                controller: controller.offerProductBrandController,
-                hintText: "brand name",
-                obscureText: false,
-              ),
-              addVerticalSpace(10),
-              Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                      child: OAYSCustomTextField(
-                        controller: controller.offerProductCategoryController,
-                        hintText: "category",
-                        obscureText: false,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                      child: OAYSCustomTextField(
-                        controller:
-                            controller.offerProductSubCategoryController,
-                        hintText: "sub category",
-                        obscureText: false,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              addVerticalSpace(10),
-              Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                      child: OAYSCustomTextField(
-                        controller:
-                            controller.offerProductActualPriceController,
-                        hintText: "actual price",
-                        obscureText: false,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                      child: OAYSCustomTextField(
-                        controller:
-                            controller.offerProductDiscountPriceController,
-                        hintText: "discount price",
-                        obscureText: false,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              addVerticalSpace(10),
-              Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                      child: TextFormField(
-                        style:
-                            const TextStyle(fontSize: 18, color: Colors.black),
-                        decoration: InputDecoration(
-                          hintText: 'offer start date',
-                          hintStyle: TextStyle(
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: Text(
+                          "No product image",
+                          style: TextStyle(
                             fontSize: 18,
-                            color: hintTextColor,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        controller: controller.offerProductStartDateController,
-                        readOnly: true,
-                        onTap: () async {
-                          _showDatePicker();
-                          if (_dateTime != null) {
-                            controller.offerProductStartDateController.text =
-                                _getFormattedDate(_dateTime);
-                          }
-                        },
                       ),
-                    ),
+                    ],
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                      child: TextFormField(
-                        style:
-                            const TextStyle(fontSize: 18, color: Colors.black),
-                        decoration: InputDecoration(
-                          hintText: 'offer start date',
-                          hintStyle: TextStyle(
-                            fontSize: 18,
-                            color: hintTextColor,
+                  OAYSCustomTextField(
+                    controller: controller.offerProductNameController,
+                    hintText: "product name",
+                    obscureText: false,
+                  ),
+                  addVerticalSpace(10),
+                  OAYSCustomTextField(
+                    controller: controller.offerProductBrandController,
+                    hintText: "brand name",
+                    obscureText: false,
+                  ),
+                  addVerticalSpace(10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                          child: OAYSCustomTextField(
+                            controller:
+                                controller.offerProductCategoryController,
+                            hintText: "category",
+                            obscureText: false,
                           ),
                         ),
-                        controller: controller.offerProductEndDateController,
-                        readOnly: true,
-                        onTap: () async {
-                          _showDatePicker();
-                          if (_dateTime != null) {
-                            controller.offerProductEndDateController.text =
-                                _getFormattedDate(_dateTime);
-                          }
-                        },
                       ),
-                    ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                          child: OAYSCustomTextField(
+                            controller:
+                                controller.offerProductSubCategoryController,
+                            hintText: "sub category",
+                            obscureText: false,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+                  addVerticalSpace(10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                          child: OAYSCustomTextField(
+                            controller:
+                                controller.offerProductActualPriceController,
+                            hintText: "actual price",
+                            obscureText: false,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                          child: OAYSCustomTextField(
+                            controller:
+                                controller.offerProductDiscountPriceController,
+                            hintText: "discount price",
+                            obscureText: false,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  addVerticalSpace(10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                          child: TextFormField(
+                            style: const TextStyle(
+                                fontSize: 18, color: Colors.black),
+                            decoration: InputDecoration(
+                              hintText: 'offer start date',
+                              hintStyle: TextStyle(
+                                fontSize: 18,
+                                color: hintTextColor,
+                              ),
+                            ),
+                            controller:
+                                controller.offerProductStartDateController,
+                            readOnly: true,
+                            onTap: () async {
+                              _showDatePicker();
+                              if (_dateTime != null) {
+                                controller.offerProductStartDateController
+                                    .text = _getFormattedDate(_dateTime);
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                          child: TextFormField(
+                            style: const TextStyle(
+                                fontSize: 18, color: Colors.black),
+                            decoration: InputDecoration(
+                              hintText: 'offer start date',
+                              hintStyle: TextStyle(
+                                fontSize: 18,
+                                color: hintTextColor,
+                              ),
+                            ),
+                            controller:
+                                controller.offerProductEndDateController,
+                            readOnly: true,
+                            onTap: () async {
+                              _showDatePicker();
+                              if (_dateTime != null) {
+                                controller.offerProductEndDateController.text =
+                                    _getFormattedDate(_dateTime);
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  addVerticalSpace(10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                          child: OAYSCustomTextField(
+                            controller: controller.offerProductWeightController,
+                            hintText: "product weight",
+                            obscureText: false,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                          child: OAYSCustomTextField(
+                            controller: controller
+                                .offerProductDiscountPercentController,
+                            hintText: "discount %",
+                            obscureText: false,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  addVerticalSpace(10),
+                  TextField(
+                    controller: controller.offerProductDescriptionController,
+                    decoration: const InputDecoration(
+                      // labelText: "product descrtion",
+                      // floatingLabelAlignment: FloatingLabelAlignment.start,
+                      hintText: "product description",
+                    ),
+                    style: const TextStyle(color: Colors.black, fontSize: 18.0),
+                  ),
+                  addVerticalSpace(25),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(30, 0, 15, 0),
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              setState(() {
+                                controller.isProductSuccess.value = true;
+                              });
+                              controller.addProduct()?.then((value) {
+                                Get.snackbar(
+                                  'Info',
+                                  value,
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  colorText: Colors.black,
+                                  backgroundColor: boxFillColor,
+                                );
+                                setState(() {
+                                  controller.isProductSuccess.value = false;
+                                  controller.isNoProductImageChecked.value =
+                                      false;
+                                  controller.productImagePath.value = '';
+                                  controller.isGestureTapDisabled.value = false;
+                                });
+                              });
+                            },
+                            child: const Text("Add"),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 0, 30, 0),
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              setState(() {
+                                controller.isNoProductImageChecked.value =
+                                    false;
+                                controller.productImagePath.value = '';
+                                controller.isGestureTapDisabled.value = false;
+                              });
+                              controller.cancelProduct();
+                            },
+                            child: const Text("Cancel"),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  addVerticalSpace(50),
                 ],
               ),
-              addVerticalSpace(10),
-              Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                      child: OAYSCustomTextField(
-                        controller: controller.offerProductWeightController,
-                        hintText: "product weight",
-                        obscureText: false,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                      child: OAYSCustomTextField(
-                        controller:
-                            controller.offerProductDiscountPercentController,
-                        hintText: "discount %",
-                        obscureText: false,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              addVerticalSpace(10),
-              TextField(
-                controller: controller.offerProductDescriptionController,
-                decoration: const InputDecoration(
-                  // labelText: "product descrtion",
-                  // floatingLabelAlignment: FloatingLabelAlignment.start,
-                  hintText: "product description",
-                ),
-              ),
-              addVerticalSpace(25),
-              Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(30, 0, 15, 0),
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          controller.addProduct();
-                        },
-                        child: const Text("Add"),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 0, 30, 0),
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          setState(() {
-                            controller.isNoProductImageChecked.value = false;
-                            controller.productImagePath.value = '';
-                            controller.isGestureTapDisabled.value = false;
-                          });
-                          controller.cancelProduct();
-                        },
-                        child: const Text("Cancel"),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              addVerticalSpace(50),
-            ],
+            ),
           ),
         ),
-      ),
+        if (controller.isProductSuccess.value)
+          const Opacity(
+            opacity: 0.5,
+            child: ModalBarrier(
+              color: Colors.black,
+              dismissible: false,
+            ),
+          ),
+        if (controller.isProductSuccess.value)
+          const Center(
+            child: CircularProgressIndicator(),
+          ),
+      ],
     );
   }
 

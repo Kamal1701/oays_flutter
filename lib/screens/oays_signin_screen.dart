@@ -110,15 +110,6 @@ class _OAYSSignInScreenState extends State<OAYSSignInScreen> {
                       ),
                     ),
                     addVerticalSpace(20),
-                    // controller.isLoginSuccess.value
-                    //     ? ModalBarrier(
-                    //         color: Colors.grey.withOpacity(0.5),
-                    //         dismissible: false,
-                    //       )
-                    //     : Container(),
-                    // controller.isLoginSuccess.value
-                    //     ? const CircularProgressIndicator()
-                    //     :
                     OAYSCustomElevatedButtons(
                       buttonText: "Sign In",
                       onTap: () async {

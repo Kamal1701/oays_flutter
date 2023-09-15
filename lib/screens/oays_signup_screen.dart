@@ -45,79 +45,91 @@ class _OAYSCustomerSignUpScreenState extends State<OAYSCustomerSignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              hexStringToColor("edd38c"),
-              hexStringToColor("ebc86a"),
-              hexStringToColor("e6b943")
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 120, 20, 0),
-            child: Column(
-              children: <Widget>[
-                addVerticalSpace(30),
-                const Text(
-                  "Customer Registration",
-                  style: TextStyle(
-                    fontSize: 21,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                addVerticalSpace(30),
-                OAYSCustomTextField(
-                  controller: controller.userName,
-                  hintText: "user name",
-                  obscureText: false,
-                ),
-                addVerticalSpace(15),
-                OAYSCustomTextField(
-                  controller: controller.emailAddress,
-                  hintText: "email id",
-                  obscureText: false,
-                ),
-                addVerticalSpace(15),
-                OAYSCustomTextField(
-                  controller: controller.password,
-                  hintText: "password",
-                  obscureText: true,
-                ),
-                addVerticalSpace(15),
-                OAYSCustomTextField(
-                  controller: controller.location,
-                  hintText: "location",
-                  obscureText: false,
-                ),
-                addVerticalSpace(25),
-                controller.isRegisterSuccess.value
-                    ? const CircularProgressIndicator()
-                    : OAYSCustomElevatedButtons(
-                        buttonText: "Sign-Up",
-                        onTap: () async {
-                          setState(() {
-                            controller.isRegisterSuccess.value =
-                                controller.isRegisterSuccess.value
-                                    ? true
-                                    : false;
-                          });
-                          userSignUp();
-                        },
+    return Stack(
+      children: [
+        Scaffold(
+          body: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  hexStringToColor("edd38c"),
+                  hexStringToColor("ebc86a"),
+                  hexStringToColor("e6b943")
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 120, 20, 0),
+                child: Column(
+                  children: <Widget>[
+                    addVerticalSpace(30),
+                    const Text(
+                      "Customer Registration",
+                      style: TextStyle(
+                        fontSize: 21,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
-              ],
+                    ),
+                    addVerticalSpace(30),
+                    OAYSCustomTextField(
+                      controller: controller.userName,
+                      hintText: "user name",
+                      obscureText: false,
+                    ),
+                    addVerticalSpace(15),
+                    OAYSCustomTextField(
+                      controller: controller.emailAddress,
+                      hintText: "email id",
+                      obscureText: false,
+                    ),
+                    addVerticalSpace(15),
+                    OAYSCustomTextField(
+                      controller: controller.password,
+                      hintText: "password",
+                      obscureText: true,
+                    ),
+                    addVerticalSpace(15),
+                    OAYSCustomTextField(
+                      controller: controller.location,
+                      hintText: "location",
+                      obscureText: false,
+                    ),
+                    addVerticalSpace(25),
+                    OAYSCustomElevatedButtons(
+                      buttonText: "Sign-Up",
+                      onTap: () async {
+                        setState(() {
+                          controller.isRegisterSuccess.value =
+                              controller.isRegisterSuccess.value ? true : false;
+                        });
+                        userSignUp();
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
-      ),
+        if (controller.isRegisterSuccess.value)
+          const Opacity(
+            opacity: 0.5,
+            child: ModalBarrier(
+              color: Colors.grey,
+              dismissible: false,
+            ),
+          ),
+        if (controller.isRegisterSuccess.value)
+          const Center(
+            child: CircularProgressIndicator(),
+          ),
+      ],
     );
   }
 }
