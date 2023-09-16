@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oays/screens/oays_signin_screen.dart';
+import 'package:oays/utils/helpers/color_constant.dart';
 import 'package:oays/utils/helpers/color_utils.dart';
 import 'package:oays/utils/helpers/helper_widgets.dart';
 
@@ -61,9 +62,14 @@ class _OAYSForgotPasswordScreenState extends State<OAYSForgotPasswordScreen> {
                 TextField(
                   controller: _emaildIdforgotTextController,
                   obscureText: false,
-                  decoration: const InputDecoration(
-                    hintText: "email address",
-                  ),
+                  decoration: InputDecoration(
+                      // hintText: "email address",
+                      labelText: "Email Address",
+                      labelStyle: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: hintTextColor,
+                      )),
                 ),
                 // OAYS_TextField(
                 //   controller: _emaildIdforgotTextController,

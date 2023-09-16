@@ -22,8 +22,6 @@ class OAYSAddOfferScreen extends StatefulWidget {
 class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
   final controller = Get.put(OAYSAddOfferController());
 
-  DateTime _dateTime = DateTime.now();
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -51,7 +49,13 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                   addVerticalSpace(20),
                   GestureDetector(
                     onTap: controller.isGestureTapDisabled.value
-                        ? null
+                        ? (() => Get.snackbar(
+                              'Info',
+                              'To add image, please uncheck no product image.',
+                              snackPosition: SnackPosition.BOTTOM,
+                              colorText: Colors.black,
+                              backgroundColor: boxFillColor,
+                            ))
                         : () async {
                             controller.productImagePath.value =
                                 await _selectImageFromGallery();
@@ -101,18 +105,19 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                       ),
                     ],
                   ),
+                  addVerticalSpace(15),
                   OAYSCustomTextField(
                     controller: controller.offerProductNameController,
-                    hintText: "product name",
+                    hintText: "Product Name",
                     obscureText: false,
                   ),
-                  addVerticalSpace(10),
+                  addVerticalSpace(15),
                   OAYSCustomTextField(
                     controller: controller.offerProductBrandController,
-                    hintText: "brand name",
+                    hintText: "Brand Name",
                     obscureText: false,
                   ),
-                  addVerticalSpace(10),
+                  addVerticalSpace(15),
                   Row(
                     children: [
                       Expanded(
@@ -121,7 +126,7 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                           child: OAYSCustomTextField(
                             controller:
                                 controller.offerProductCategoryController,
-                            hintText: "category",
+                            hintText: "Category",
                             obscureText: false,
                           ),
                         ),
@@ -132,14 +137,14 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                           child: OAYSCustomTextField(
                             controller:
                                 controller.offerProductSubCategoryController,
-                            hintText: "sub category",
+                            hintText: "Sub category",
                             obscureText: false,
                           ),
                         ),
                       ),
                     ],
                   ),
-                  addVerticalSpace(10),
+                  addVerticalSpace(15),
                   Row(
                     children: [
                       Expanded(
@@ -148,7 +153,7 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                           child: OAYSCustomTextField(
                             controller:
                                 controller.offerProductActualPriceController,
-                            hintText: "actual price",
+                            hintText: "Actual Price",
                             obscureText: false,
                           ),
                         ),
@@ -159,14 +164,14 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                           child: OAYSCustomTextField(
                             controller:
                                 controller.offerProductDiscountPriceController,
-                            hintText: "discount price",
+                            hintText: "Discount Price",
                             obscureText: false,
                           ),
                         ),
                       ),
                     ],
                   ),
-                  addVerticalSpace(10),
+                  addVerticalSpace(15),
                   Row(
                     children: [
                       Expanded(
@@ -176,7 +181,7 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                             style: const TextStyle(
                                 fontSize: 18, color: Colors.black),
                             decoration: InputDecoration(
-                              hintText: 'offer start date',
+                              hintText: 'Offer Start Date',
                               hintStyle: TextStyle(
                                 fontSize: 18,
                                 color: hintTextColor,
@@ -186,11 +191,19 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                                 controller.offerProductStartDateController,
                             readOnly: true,
                             onTap: () async {
-                              _showDatePicker();
-                              if (_dateTime != null) {
-                                controller.offerProductStartDateController
-                                    .text = _getFormattedDate(_dateTime);
-                              }
+                              // _showDatePicker(context);
+                              final startDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime.now()
+                                    .subtract(const Duration(days: 0)),
+                                lastDate: DateTime(2099),
+                              );
+
+                              controller.offerProductStartDateController.text =
+                                  startDate == null
+                                      ? ''
+                                      : _getFormattedDate(startDate);
                             },
                           ),
                         ),
@@ -202,7 +215,7 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                             style: const TextStyle(
                                 fontSize: 18, color: Colors.black),
                             decoration: InputDecoration(
-                              hintText: 'offer start date',
+                              hintText: 'Offer End Date',
                               hintStyle: TextStyle(
                                 fontSize: 18,
                                 color: hintTextColor,
@@ -212,18 +225,25 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                                 controller.offerProductEndDateController,
                             readOnly: true,
                             onTap: () async {
-                              _showDatePicker();
-                              if (_dateTime != null) {
-                                controller.offerProductEndDateController.text =
-                                    _getFormattedDate(_dateTime);
-                              }
+                              final endDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime.now()
+                                    .subtract(const Duration(days: 0)),
+                                lastDate: DateTime(2099),
+                              );
+
+                              controller.offerProductEndDateController.text =
+                                  endDate == null
+                                      ? ''
+                                      : _getFormattedDate(endDate);
                             },
                           ),
                         ),
                       ),
                     ],
                   ),
-                  addVerticalSpace(10),
+                  addVerticalSpace(15),
                   Row(
                     children: [
                       Expanded(
@@ -231,7 +251,7 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                           padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
                           child: OAYSCustomTextField(
                             controller: controller.offerProductWeightController,
-                            hintText: "product weight",
+                            hintText: "Weight",
                             obscureText: false,
                           ),
                         ),
@@ -242,21 +262,23 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                           child: OAYSCustomTextField(
                             controller: controller
                                 .offerProductDiscountPercentController,
-                            hintText: "discount %",
+                            hintText: "Discount %",
                             obscureText: false,
                           ),
                         ),
                       ),
                     ],
                   ),
-                  addVerticalSpace(10),
+                  addVerticalSpace(15),
                   TextField(
                     controller: controller.offerProductDescriptionController,
-                    decoration: const InputDecoration(
-                      // labelText: "product descrtion",
-                      // floatingLabelAlignment: FloatingLabelAlignment.start,
-                      hintText: "product description",
-                    ),
+                    decoration: InputDecoration(
+                        hintText: 'Description',
+                        labelText: 'Description',
+                        labelStyle: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: hintTextColor)),
                     style: const TextStyle(color: Colors.black, fontSize: 18.0),
                   ),
                   addVerticalSpace(25),
@@ -280,10 +302,16 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
                                 );
                                 setState(() {
                                   controller.isProductSuccess.value = false;
-                                  controller.isNoProductImageChecked.value =
-                                      false;
-                                  controller.productImagePath.value = '';
-                                  controller.isGestureTapDisabled.value = false;
+                                  // controller.isNoProductImageChecked.value =
+                                  //     false;
+                                  if (value.contains('Successfully')) {
+                                    print(value);
+                                    controller.productImagePath.value = '';
+                                    controller.isGestureTapDisabled.value =
+                                        false;
+                                    controller.isNoProductImageChecked.value =
+                                        false;
+                                  }
                                 });
                               });
                             },
@@ -344,18 +372,30 @@ class _OAYSAddOfferScreenState extends State<OAYSAddOfferScreen> {
     }
   }
 
-  _showDatePicker() {
-    showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2023),
-      lastDate: DateTime(2099),
-    ).then((value) {
-      setState(() {
-        _dateTime = value!;
-      });
-    });
-  }
+  // _showDatePicker(BuildContext context) async {
+  //   // showDatePicker(
+  //   //   context: context,
+  //   //   initialDate: DateTime.now(),
+  //   //   firstDate: DateTime(2023),
+  //   //   lastDate: DateTime(2099),
+  //   // ).then((value) {
+  //   //   setState(() {
+  //   //     _dateTime = value!;
+  //   //   });
+  //   // });
+  //   final selectedDate = await showDatePicker(
+  //     context: context,
+  //     initialDate: DateTime.now(),
+  //     firstDate: DateTime(2023),
+  //     lastDate: DateTime(2099),
+  //   );
+
+  //   if (selectedDate != null) {
+  //     setState(() {
+  //       _dateTime = selectedDate;
+  //     });
+  //   }
+  // }
 
   _getFormattedDate(DateTime dateTime) {
     return DateFormat('dd-MM-yyyy').format(dateTime);

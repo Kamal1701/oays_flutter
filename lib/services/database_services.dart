@@ -15,6 +15,10 @@ class DatabaseService {
     'updatedDate': FieldValue.serverTimestamp()
   };
 
+  FirebaseFirestore getDBInstance() {
+    return _db;
+  }
+
   Future<String?> addCustomer({required CustomerRegistration cReg}) async {
     try {
       CollectionReference collectRef = _db.collection("CustomerProfile");
@@ -110,6 +114,25 @@ class DatabaseService {
       return e.message.toString();
     } catch (e) {
       return 'Unable to add product now. Please try again later.';
+    }
+  }
+
+  Future<QuerySnapshot?> getOfferProductByUserid(
+      {required OfferProduct op}) async {
+    try {
+      QuerySnapshot productSnapshot = await _db
+          .collection('ProductDetail')
+          .doc(userId)
+          .collection('OfferProductDetail')
+          .get();
+
+      return productSnapshot;
+    } on FirebaseException catch (e) {
+      // return e.message.toString();
+      return null;
+    } catch (e) {
+      // return 'Unable to add product now. Please try again later.';
+      return null;
     }
   }
 }

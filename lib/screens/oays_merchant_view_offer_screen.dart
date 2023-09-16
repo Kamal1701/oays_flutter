@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:oays/components/oays_merchant_offer_gridview_builder.dart';
 import 'package:oays/utils/helpers/color_constant.dart';
@@ -18,21 +21,32 @@ class _OAYSMerchantViewOfferScreenState
   );
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 0),
-      decoration: BoxDecoration(
-        color: bgdDarkColor,
-      ),
-      child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 1,
-          childAspectRatio: 3.8 / 2,
-        ),
-        itemCount: myProducts.length,
-        itemBuilder: (context, index) {
-          return const OAYSMerchantOfferGridViewBuilder();
-        },
-      ),
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection('ProductDetail')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('OfferProductDetail')
+          .snapshots(),
+      builder: (context, productSnapshot) {
+        return productSnapshot.hasData
+            ? Container(
+                padding: const EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 0),
+                decoration: BoxDecoration(
+                  color: bgdDarkColor,
+                ),
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 1,
+                    childAspectRatio: 3.8 / 2,
+                  ),
+                  itemCount: productSnapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    return const OAYSMerchantOfferGridViewBuilder();
+                  },
+                ),
+              )
+            : const CircularProgressIndicator();
+      },
     );
   }
 }

@@ -4,9 +4,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:oays/models/offer_product_model.dart';
 import 'package:oays/services/database_services.dart';
-import 'package:oays/utils/helpers/color_constant.dart';
 
 class OAYSAddOfferController extends GetxController {
   static OAYSAddOfferController get instance => Get.find();
@@ -53,56 +53,51 @@ class OAYSAddOfferController extends GetxController {
         offerProductEndDateController.text.isEmpty ||
         offerProductWeightController.text.isEmpty ||
         offerProductDescriptionController.text.isEmpty) {
-      // Get.snackbar(
-      //   'Info',
-      //   'Please fill the required details.',
-      //   snackPosition: SnackPosition.BOTTOM,
-      //   backgroundColor: boxFillColor,
-      //   colorText: Colors.black,
-      // );
       return 'Please fill the required details.';
+    } else if (!isNoProductImageChecked.value && productImagePath.value == '') {
+      return 'Please add offer product image.';
     } else {
+      DateFormat dateFormat = DateFormat('dd-MM-yyyy');
+      final startDate = dateFormat.parse(offerProductStartDateController.text);
+      final endDate = dateFormat.parse(offerProductEndDateController.text);
       isProductSuccess.value = true;
-      if (isNoProductImageChecked.value) {
-        productImageUrl.value = '';
-      } else {
-        final Reference storageReference = FirebaseStorage.instance.ref().child(
-              'productImages/${DateTime.now().millisecondsSinceEpoch.toString()}',
-            );
-        UploadTask uploadTask =
-            storageReference.putFile(File(productImageFile!.path));
-        await uploadTask.whenComplete(() async {
-          productImageUrl.value = await storageReference.getDownloadURL();
-        });
-      }
+      if (startDate.compareTo(endDate) <= 0) {
+        if (isNoProductImageChecked.value) {
+          productImageUrl.value = '';
+        } else {
+          final Reference storageReference =
+              FirebaseStorage.instance.ref().child(
+                    'productImages/${DateTime.now().millisecondsSinceEpoch.toString()}',
+                  );
+          UploadTask uploadTask =
+              storageReference.putFile(File(productImageFile!.path));
+          await uploadTask.whenComplete(() async {
+            productImageUrl.value = await storageReference.getDownloadURL();
+          });
+        }
 
-      OfferProduct op = OfferProduct(
-          productImageUrl.value,
-          isNoProductImageChecked.value,
-          offerProductNameController.text.trim(),
-          offerProductBrandController.text.trim(),
-          offerProductActualPriceController.text.trim(),
-          offerProductDiscountPriceController.text.trim(),
-          offerProductStartDateController.text,
-          offerProductEndDateController.text,
-          offerProductWeightController.text.trim(),
-          offerProductDiscountPercentController.text.trim(),
-          offerProductDescriptionController.text.trim());
-      String? status = await DatabaseService().addOfferProduct(op: op);
-      if (status == 'Success') {
-        // Get.snackbar('Info', 'Offer Added Successfully.',
-        //     snackPosition: SnackPosition.BOTTOM,
-        //     colorText: Colors.black,
-        //     backgroundColor: boxFillColor);
-        clearScreen();
-        return 'Offer Added Successfully...';
+        OfferProduct op = OfferProduct(
+            productImageUrl.value,
+            isNoProductImageChecked.value,
+            offerProductNameController.text.trim(),
+            offerProductBrandController.text.trim(),
+            offerProductActualPriceController.text.trim(),
+            offerProductDiscountPriceController.text.trim(),
+            offerProductStartDateController.text,
+            offerProductEndDateController.text,
+            offerProductWeightController.text.trim(),
+            offerProductDiscountPercentController.text.trim(),
+            offerProductDescriptionController.text.trim());
+        String? status = await DatabaseService().addOfferProduct(op: op);
+        if (status == 'Success') {
+          clearScreen();
+          return 'Offer Added Successfully.';
+        } else {
+          clearScreen();
+          return status;
+        }
       } else {
-        // Get.snackbar('Info', status,
-        //     snackPosition: SnackPosition.BOTTOM,
-        //     colorText: Colors.black,
-        //     backgroundColor: boxFillColor);
-        clearScreen();
-        return status;
+        return 'Offer end date should be greater than offer start date';
       }
     }
   }

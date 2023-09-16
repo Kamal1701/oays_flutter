@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oays/utils/helpers/color_constant.dart';
 
 class OAYSCustomTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -21,8 +22,12 @@ class OAYSCustomTextField extends StatelessWidget {
         controller: controller,
         obscureText: obscureText,
         decoration: InputDecoration(
-          hintText: hintText,
-        ),
+            // hintText: hintText,
+            labelText: hintText,
+            labelStyle: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: hintTextColor)),
         style: const TextStyle(
           fontSize: 18,
           color: Colors.black,

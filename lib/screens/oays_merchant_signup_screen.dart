@@ -75,47 +75,47 @@ class _OAYSMerchantSignUpScreenState extends State<OAYSMerchantSignUpScreen> {
                   addVerticalSpace(15),
                   OAYSCustomTextField(
                       controller: controller.userName,
-                      hintText: "user name",
+                      hintText: "User Name",
                       obscureText: false),
                   addVerticalSpace(15),
                   OAYSCustomTextField(
                       controller: controller.emailAddress,
-                      hintText: "email address",
+                      hintText: "Email ID",
                       obscureText: false),
                   addVerticalSpace(15),
                   OAYSCustomTextField(
                       controller: controller.password,
-                      hintText: "password",
+                      hintText: "Password",
                       obscureText: true),
                   addVerticalSpace(15),
                   OAYSCustomTextField(
                       controller: controller.location,
-                      hintText: "location",
+                      hintText: "Your Location",
                       obscureText: false),
                   addVerticalSpace(15),
                   OAYSCustomTextField(
                       controller: controller.shopName,
-                      hintText: "shop name",
+                      hintText: "Shop Name",
                       obscureText: false),
                   addVerticalSpace(15),
                   OAYSCustomTextField(
                       controller: controller.shopStreetName,
-                      hintText: "street name",
+                      hintText: "Street Name",
                       obscureText: false),
                   addVerticalSpace(15),
                   OAYSCustomTextField(
                       controller: controller.shopCity,
-                      hintText: "city name",
+                      hintText: "Shop's City",
                       obscureText: false),
                   addVerticalSpace(15),
                   OAYSCustomTextField(
                       controller: controller.shopState,
-                      hintText: "state",
+                      hintText: "Shop's State",
                       obscureText: false),
                   addVerticalSpace(15),
                   OAYSCustomTextField(
                       controller: controller.shopPincode,
-                      hintText: "pincode",
+                      hintText: "Shop's Pincode",
                       obscureText: false),
                   addVerticalSpace(30),
                   OAYSCustomElevatedButtons(

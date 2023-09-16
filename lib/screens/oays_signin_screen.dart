@@ -80,13 +80,13 @@ class _OAYSSignInScreenState extends State<OAYSSignInScreen> {
                     addVerticalSpace(30),
                     OAYSCustomTextField(
                       controller: controller.emailAddress,
-                      hintText: "user email",
+                      hintText: "Email Address",
                       obscureText: false,
                     ),
                     addVerticalSpace(10),
                     OAYSCustomTextField(
                       controller: controller.password,
-                      hintText: "password",
+                      hintText: "Password",
                       obscureText: true,
                     ),
                     // addVerticalSpace(0),
